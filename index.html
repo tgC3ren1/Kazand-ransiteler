@@ -2,14 +2,30 @@
 <html lang="tr">
 <head>
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-GNVT87QTS2"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GNVT87QTS2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-GNVT87QTS2');
+  </script>
 
-  gtag('config', 'G-GNVT87QTS2');
-</script>
+  <!-- ✅ Meta Pixel Code -->
+  <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+    (window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1965926274206438');   // Pixel ID
+    fbq('track', 'PageView');
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+         src="https://www.facebook.com/tr?id=1965926274206438&ev=PageView&noscript=1"/>
+  </noscript>
+  <!-- ✅ End Meta Pixel Code -->
+
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Deneme bonusu Veren siteler</title>
@@ -121,7 +137,7 @@
   const BOTS = [
     { name:"Yapay zeka Bahis", url:"https://t.me/Yapayzekabah1sbot", tags:["YENİ","ÖNERİLEN"] },
     { name:"Yatırımsız Deneme Bonusu Veren Siteler", url:"https://t.me/Marsbahis1casibombot", tags:["POPÜLER","ÖNERİLEN"] },
-    { name:"Çevrimsiz deneme bonusu veren siteler", url:"https://t.me/Denemebonusuveren1bot", tags:["ÇEVRİMSİZ","GÜNCEL"] },
+    { name:"Çevrimsiz deneme bonusu veren siteler", url:"https://t.me/mockerabi1", tags:["ÇEVRİMSİZ","GÜNCEL"] },
     { name:"Deneme kutusu bot", url:"https://t.me/DenemeKutusubot", tags:["YENİ","POPÜLER"] },
     { name:"Deneme bonusu veren siteler", url:"https://t.me/denemekutubot", tags:["GÜNCEL","ÖNERİLEN"] },
     { name:"En iyi deneme bonusu veren siteler", url:"https://t.me/betine_denemebonusbot", tags:["POPÜLER","ÖNERİLEN"] },
@@ -225,5 +241,52 @@
   }
   requestAnimationFrame(tick);
 </script>
+
+<!-- 🔻 Meta Pixel: Davranış eventleri (BounceExit, NoClickExit, TelegramClick) -->
+<script>
+(function(){
+  const startTs = Date.now();
+  let totalClicks = 0;
+
+  // Telegram tıklaması sayılacak alan adları / şemalar
+  const TELEGRAM_HOSTS = ['t.me','telegram.me'];
+  const TG_SCHEMES = ['tg:'];
+
+  function getHost(href){ try{ return new URL(href).host.toLowerCase(); }catch(_){ return ''; } }
+  function hasScheme(href){ return TG_SCHEMES.some(s => href.toLowerCase().startsWith(s)); }
+
+  // Tıklama dinle: Telegram linkine tıklandığında event gönder
+  document.addEventListener('click', function(e){
+    totalClicks++;
+    const a = e.target.closest && e.target.closest('a');
+    if(!a) return;
+    const href = a.getAttribute('href') || '';
+    const host = getHost(href);
+    if(TELEGRAM_HOSTS.includes(host) || hasScheme(href) || a.classList.contains('js-telegram') || a.getAttribute('data-telegram')==='1'){
+      fbq('trackCustom','TelegramClick',{ href });
+    }
+  }, {passive:true});
+
+  // Çıkışta: BounceExit (<8sn, hiç tıklama yok) veya NoClickExit (tıklama=0)
+  let fired = { bounce:false, noClick:false };
+  function handleExit(){
+    const dwell = (Date.now() - startTs) / 1000;
+    if(!fired.bounce && totalClicks===0 && dwell<8){
+      fired.bounce = true;
+      fbq('trackCustom','BounceExit',{ dwell_seconds: Math.round(dwell) });
+      return;
+    }
+    if(!fired.noClick && totalClicks===0){
+      fired.noClick = true;
+      fbq('trackCustom','NoClickExit',{ dwell_seconds: Math.round(dwell) });
+    }
+  }
+
+  document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='hidden'){handleExit();} });
+  window.addEventListener('pagehide', handleExit);
+  window.addEventListener('beforeunload', handleExit);
+})();
+</script>
+<!-- 🔺 End -->
 </body>
 </html>
